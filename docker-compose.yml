@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - mlops-network
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.10.0
+    ports:
+      - "5000:5000"
+    command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 0.0.0.0
+    volumes:
+      - ./mlflow_data:/mlflow
+    networks:
+      - mlops-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - mlops-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - mlops-network
+    depends_on:
+      - prometheus
+
+networks:
+  mlops-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+  prometheus_data:
+  grafana_data:
