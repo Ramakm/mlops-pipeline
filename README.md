@@ -43,6 +43,12 @@ Adjust values as needed for your deployment.
 - API docs: `http://localhost:8000/docs`
 - MLflow UI: `http://localhost:5000`
 - Grafana: `http://localhost:3000` (default credentials admin/admin)
-
 ## License
-MIT
+
+- This project is licensed under the MIT License. See `LICENSE` for details.
+
+## Connect with me
+
+[![X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/techwith_ram)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/techwith.ram)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Ramakm)
