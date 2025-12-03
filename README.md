@@ -1,4 +1,6 @@
 # MLOps Pipeline Project
+<img width="2732" height="2048" alt="image" src="https://github.com/user-attachments/assets/f933e35a-b6d1-4c48-9291-bac9a5e0de52" />
+
 
 ## Overview
 This repository implements a production‑grade end‑to‑end machine‑learning pipeline for time‑series forecasting using a custom dataset. It covers the full MLOps lifecycle:
