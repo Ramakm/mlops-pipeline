@@ -1,6 +1,13 @@
 # MLOps Pipeline Project
 <img width="2732" height="2048" alt="image" src="https://github.com/user-attachments/assets/f933e35a-b6d1-4c48-9291-bac9a5e0de52" />
 
+![Stars](https://img.shields.io/github/stars/Ramakm/mlops-pipeline?style=flat-square)
+![Forks](https://img.shields.io/github/forks/Ramakm/mlops-pipeline?style=flat-square)
+![PRs](https://img.shields.io/github/issues-pr/Ramakm/mlops-pipeline?style=flat-square)
+![Issues](https://img.shields.io/github/issues/Ramakm/mlops-pipeline?style=flat-square)
+![Contributors](https://img.shields.io/github/contributors/Ramakm/mlops-pipeline?style=flat-square)
+![License](https://img.shields.)
+
 
 ## Overview
 This repository implements a production‑grade end‑to‑end machine‑learning pipeline for time‑series forecasting using a custom dataset. It covers the full MLOps lifecycle:
