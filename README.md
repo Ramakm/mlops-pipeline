@@ -16,7 +16,7 @@ This repository implements a production‑grade end‑to‑end machine‑learnin
 uv sync
 
 # Copy example environment variables
-cp .env.example .env
+cp .env
 
 # Build and start services
 docker compose up -d
