@@ -6,7 +6,8 @@
 ![PRs](https://img.shields.io/github/issues-pr/Ramakm/mlops-pipeline?style=flat-square)
 ![Issues](https://img.shields.io/github/issues/Ramakm/mlops-pipeline?style=flat-square)
 ![Contributors](https://img.shields.io/github/contributors/Ramakm/mlops-pipeline?style=flat-square)
-![License](https://img.shields.)
+![License](https://img.shields.io/github/license/Ramakm/mlops-pipeline?style=flat-square)
+
 
 
 ## Overview
