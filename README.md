@@ -1,4 +1,14 @@
 # MLOps Pipeline Project
+<img width="2732" height="2048" alt="image" src="https://github.com/user-attachments/assets/f933e35a-b6d1-4c48-9291-bac9a5e0de52" />
+
+![Stars](https://img.shields.io/github/stars/Ramakm/mlops-pipeline?style=flat-square)
+![Forks](https://img.shields.io/github/forks/Ramakm/mlops-pipeline?style=flat-square)
+![PRs](https://img.shields.io/github/issues-pr/Ramakm/mlops-pipeline?style=flat-square)
+![Issues](https://img.shields.io/github/issues/Ramakm/mlops-pipeline?style=flat-square)
+![Contributors](https://img.shields.io/github/contributors/Ramakm/mlops-pipeline?style=flat-square)
+![License](https://img.shields.io/github/license/Ramakm/mlops-pipeline?style=flat-square)
+
+
 
 ## Overview
 This repository implements a production‑grade end‑to‑end machine‑learning pipeline for time‑series forecasting using a custom dataset. It covers the full MLOps lifecycle:
@@ -42,7 +52,6 @@ Adjust values as needed for your deployment.
 - API docs: `http://localhost:8000/docs`
 - MLflow UI: `http://localhost:5000`
 - Grafana: `http://localhost:3000` (default credentials admin/admin)
-
 ## License
 
 - This project is licensed under the MIT License. See `LICENSE` for details.
@@ -53,3 +62,4 @@ Adjust values as needed for your deployment.
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Ramakm)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ramakrushnamohapatra/)
 [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/techwith.ram)
+
