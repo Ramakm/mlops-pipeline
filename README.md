@@ -2,6 +2,7 @@
 
 ## Overview
 This repository implements a production‑grade end‑to‑end machine‑learning pipeline for time‑series forecasting using a custom dataset. It covers the full MLOps lifecycle:
+
 - Data ingestion & feature engineering
 - LSTM model training with transfer learning
 - Experiment tracking with **MLflow**
@@ -43,4 +44,12 @@ Adjust values as needed for your deployment.
 - Grafana: `http://localhost:3000` (default credentials admin/admin)
 
 ## License
-MIT
+
+- This project is licensed under the MIT License. See `LICENSE` for details.
+
+## Connect with me
+
+[![X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/techwith_ram)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Ramakm)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ramakrushnamohapatra/)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/techwith.ram)
