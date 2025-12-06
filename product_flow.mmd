@@ -1,0 +1,52 @@
+flowchart TD
+    %% Data side
+    subgraph Data_Ingestion
+        DS[Data Source<br/>(CSV / DB / API)] -->|raw data| ING[Ingestion Service<br/>(Python scripts)]
+        ING -->|cleaned data| FE[Feature Engineering<br/>(ETL pipelines)]
+    end
+
+    %% Model training side
+    subgraph Training
+        FE -->|features| TRAIN[Model Training<br/>LSTM + Transfer Learning]
+        TRAIN -->|metrics, artifacts| MLFLOW[MLflow Tracking Server]
+        MLFLOW -->|registered model| REG[Model Registry]
+    end
+
+    %% Deployment & serving side
+    subgraph Deployment
+        REG -->|Docker image / model files| DOCKER[Docker Compose<br/>Services]
+        DOCKER -->|starts| REDIS[Redis (caching)]
+        DOCKER -->|starts| FASTAPI[FastAPI Inference API<br/>(JWT auth, rate‑limit)]
+        FASTAPI -->|lookup| REDIS
+        FASTAPI -->|log metrics| PROM[Prometheus Exporter]
+    end
+
+    %% Client interaction
+    subgraph Client
+        USER[User / Application] -->|HTTP request| FASTAPI
+        FASTAPI -->|response| USER
+    end
+
+    %% Monitoring stack
+    subgraph Monitoring
+        PROM -->|scrape| GRAFANA[Grafana Dashboard]
+    end
+
+    %% Connections between groups
+    Data_Ingestion --> Training
+    Training --> Deployment
+    Deployment --> Monitoring
+    Monitoring --> Client
+
+    %% Styling
+    classDef data fill:#E3F2FD,stroke:#90CAF9,stroke-width:2px;
+    classDef training fill:#FFF3E0,stroke:#FFB74D,stroke-width:2px;
+    classDef deployment fill:#E8F5E9,stroke:#66BB6A,stroke-width:2px;
+    classDef client fill:#F3E5F5,stroke:#AB47BC,stroke-width:2px;
+    classDef monitoring fill:#FFEBEE,stroke:#EF5350,stroke-width:2px;
+
+    class DS,ING,FE data;
+    class TRAIN,MLFLOW,REG training;
+    class DOCKER,REDIS,FASTAPI deployment;
+    class USER client;
+    class PROM,GRAFANA monitoring;

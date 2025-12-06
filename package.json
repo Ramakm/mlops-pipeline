@@ -1,0 +1,24 @@
+{
+  "name": "mlops-pipeline",
+  "version": "1.0.0",
+  "description": "<img width=\"2732\" height=\"2048\" alt=\"image\" src=\"https://github.com/user-attachments/assets/f933e35a-b6d1-4c48-9291-bac9a5e0de52\" />",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ramakm/mlops-pipeline.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ramakm/mlops-pipeline/issues"
+  },
+  "homepage": "https://github.com/Ramakm/mlops-pipeline#readme"
+}
