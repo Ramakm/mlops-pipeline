@@ -21,10 +21,6 @@ This repository implements a production‑grade end‑to‑end machine‑learnin
 - Monitoring via **Prometheus** and **Grafana**
 - Docker Compose for reproducible environments
 
-## Product Flow
-
-![Product Flow Diagram](product_flow.svg)
-
 
 ## Quick Start
 ```bash
