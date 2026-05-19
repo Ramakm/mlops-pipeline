@@ -1,0 +1,162 @@
+name: MLOps CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.11"
+  MLFLOW_TRACKING_URI: mlruns
+
+jobs:
+  # ── 1. Lint & Format ────────────────────────────────────────────────────────
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install lint tools
+        run: pip install ruff black
+
+      - name: Ruff lint
+        run: ruff check .
+
+      - name: Black format check
+        run: black --check .
+
+  # ── 2. Unit Tests ───────────────────────────────────────────────────────────
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('requirements.txt') }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ \
+            --cov=src \
+            --cov=pipelines \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            -v
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: coverage.xml
+          fail_ci_if_error: false
+
+  # ── 3. Training Pipeline ────────────────────────────────────────────────────
+  train:
+    name: Training Pipeline
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run training pipeline
+        run: python pipelines/training_pipeline.py
+
+      - name: Upload model artefacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-artefacts
+          path: |
+            models/
+            reports/
+            mlruns/
+
+  # ── 4. Build & Push Docker Image ────────────────────────────────────────────
+  docker:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: train
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download model artefacts
+        uses: actions/download-artifact@v4
+        with:
+          name: model-artefacts
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/breast-cancer-classifier:latest
+            ${{ secrets.DOCKER_USERNAME }}/breast-cancer-classifier:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── 5. Model Evaluation Gate ────────────────────────────────────────────────
+  quality-gate:
+    name: Model Quality Gate
+    runs-on: ubuntu-latest
+    needs: train
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Download model artefacts
+        uses: actions/download-artifact@v4
+        with:
+          name: model-artefacts
+
+      - name: Check quality thresholds
+        run: |
+          python - <<'EOF'
+          import json, sys
+          with open("reports/metrics.json") as f:
+              m = json.load(f)
+          print(f"Test metrics: {json.dumps(m, indent=2)}")
+          assert m["test_accuracy"]  >= 0.92, f"Accuracy {m['test_accuracy']:.3f} < 0.92"
+          assert m["test_f1"]        >= 0.90, f"F1 {m['test_f1']:.3f} < 0.90"
+          assert m["test_roc_auc"]   >= 0.95, f"ROC-AUC {m['test_roc_auc']:.3f} < 0.95"
+          print("All quality gates passed!")
+          EOF

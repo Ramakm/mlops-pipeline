@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.9.2
+    container_name: mlflow-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlruns
+    command: >
+      mlflow server
+        --backend-store-uri /mlruns
+        --default-artifact-root /mlruns
+        --host 0.0.0.0
+        --port 5000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: breast-cancer-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../models:/app/models
+      - ../reports:/app/reports
+      - ../data:/app/data
+      - ../mlruns:/app/mlruns
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    restart: on-failure
+
+  training:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: training-job
+    command: python pipelines/training_pipeline.py
+    volumes:
+      - ../models:/app/models
+      - ../reports:/app/reports
+      - ../data:/app/data
+      - ../mlruns:/app/mlruns
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    profiles:
+      - train
+
+volumes:
+  mlruns:

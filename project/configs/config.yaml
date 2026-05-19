@@ -1,0 +1,39 @@
+project:
+  name: mlops-logistic-regression
+  version: "1.0.0"
+  description: End-to-end MLOps pipeline with Logistic Regression
+
+data:
+  raw_path: data/raw/
+  processed_path: data/processed/
+  dataset_name: breast_cancer
+  test_size: 0.2
+  validation_size: 0.1
+  random_state: 42
+
+model:
+  name: logistic_regression
+  artifact_path: models/
+  params:
+    C: 1.0
+    max_iter: 1000
+    random_state: 42
+    solver: lbfgs
+    class_weight: balanced
+
+mlflow:
+  tracking_uri: mlruns
+  experiment_name: logistic-regression-experiment
+  model_name: breast-cancer-classifier
+  registered_model_stage: Staging
+
+api:
+  host: 0.0.0.0
+  port: 8000
+  workers: 1
+
+monitoring:
+  drift_threshold: 0.10
+  psi_threshold: 0.2
+  reference_data_path: data/processed/reference.csv
+  alert_email: itsramakrushna@gmail.com
